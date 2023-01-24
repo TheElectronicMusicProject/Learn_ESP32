@@ -11,5 +11,6 @@
     ],
     "idf.pythonBinPathWin": "c:\\esp\\tools\\python_env\\idf4.4_py3.8_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "c:\\esp\\tools",
-    "idf.flashType": "UART"
+    "idf.flashType": "UART",
+    "idf.portWin": "COM3"
 }

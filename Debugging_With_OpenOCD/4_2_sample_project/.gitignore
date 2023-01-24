@@ -13,3 +13,5 @@ output/*
 
 sdkconfig
 sdkconfig.old
+
+debug.log

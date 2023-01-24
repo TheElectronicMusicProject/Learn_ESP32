@@ -1,41 +1,49 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
-typedef struct Params_struct
+typedef void (*function_pointer_t)(char *);
+
+typedef struct params_struct
 {
-    char aString[20];
-    void (*functionPointer)(char * data);
-} Params;
+    char buffer[20];
+    function_pointer_t funct_ptr;
+} param_t;
 
 
 void
-CalledWithFunctionPointer (char * data)
+called_with_funtion_pointer (char * data)
 {
     printf("%s\n", data);
+
+    return;
 }
 
-int
-foo (Params *params)
+int32_t
+foo (param_t *params)
 {
-  int x = 1;
+    int32_t val = 1;
 
-  for (int i = 0; i < 10; i++)
-  {
-    x += i * x;
-  }
+    for (int32_t idx = 0; idx < 10; idx++)
+    {
+        val += idx * val;
+    }
 
-  params->functionPointer(params->aString);
-  memset(params->aString,5,1024);
-  x++;
-  return x;
+    params->funct_ptr(params->buffer);
+    memset(params->buffer, 5, 1024);
+    val++;
+
+    return val;
 }
 
 void
 app_main (void)
 {
-  Params params;
-  sprintf(params.aString, "hello world!");
-  params.functionPointer = CalledWithFunctionPointer;
-  int result = foo(&params);
-  printf("%d\n", result);
+    param_t params;
+    sprintf(params.buffer, "hello world!");
+    params.funct_ptr = called_with_funtion_pointer;
+    int32_t result = foo(&params);
+    printf("%d\n", result);
+
+    return;
 }
