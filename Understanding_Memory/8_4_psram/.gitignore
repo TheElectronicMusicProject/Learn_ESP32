@@ -1,0 +1,14 @@
+# ignore all files in any directory named build
+build/*
+!build/
+/build/**/**
+!/build/**/
+
+# ignore all files in any directory named output
+!output/
+output/*
+
+# but do track Doxyfile, even though you're ignoring all files in output
+!output/Doxyfile
+
+sdkconfig.old
