@@ -1,0 +1,27 @@
+{
+    "personalizations": [
+        {
+            "to": [
+                {
+                    "email": "otmw.electronicmusic@gmail.com",
+                    "name": "Filippo"
+                }
+            ],
+            "subject": "Hello, World!"
+        }
+    ],
+    "content": [
+        {
+            "type": "text/plain",
+            "value": "Heya!"
+        }
+    ],
+    "from": {
+        "email": "otmw.electronicmusic@gmail.com",
+        "name": "Filippo"
+    },
+    "reply_to": {
+        "email": "otmw.electronicmusic@gmail.com",
+        "name": "Filippo"
+    }
+}
