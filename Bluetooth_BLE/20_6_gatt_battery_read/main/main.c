@@ -17,6 +17,8 @@
 #define DEVICE_NAME             "MY BLE DEVICE"
 #define DEVICE_INFOR_SERVICE    0x180A
 #define MANUFACTURER_NAME       0X2A29
+#define BATTERY_SERVICE         0x180F
+#define BATTERY_LEVEL_CHAR      0X2A19
 
 uint8_t g_ble_add_type = 0;
 
@@ -27,6 +29,26 @@ device_info (uint16_t conn_handle, uint16_t attr_handle,
     // mbuf is a buffer used by nible bluetooth that keep tracks of data.
     //
     os_mbuf_append(p_ctxt->om, "manufacturer name", strlen("manufacturer name"));
+
+    return 0;
+}
+
+static int
+device_write (uint16_t conn_handle, uint16_t attr_handle,
+             struct ble_gatt_access_ctxt * p_ctxt, void * p_arg)
+{
+    printf("incoming message: %.*s\n", p_ctxt->om->om_len, p_ctxt->om->om_data);
+
+    return 0;
+}
+
+static int
+battery_read (uint16_t conn_handle, uint16_t attr_handle,
+             struct ble_gatt_access_ctxt * p_ctxt, void * p_arg)
+{
+    uint8_t battery_level = 85;
+
+    os_mbuf_append(p_ctxt->om, &battery_level, sizeof(battery_level));
 
     return 0;
 }
@@ -44,6 +66,32 @@ const struct ble_gatt_svc_def g_gatt_svcs[] = {
                 .uuid = BLE_UUID16_DECLARE(MANUFACTURER_NAME),
                 .flags = BLE_GATT_CHR_F_READ,
                 .access_cb = device_info
+            },
+            {
+                .uuid = BLE_UUID128_DECLARE(0x00, 0x11, 0x22, 0x33,
+                                            0x44, 0x55, 0x66, 0x77,
+                                            0x88, 0x99, 0XAA, 0XBB,
+                                            0XCC, 0XDD, 0XEE, 0XFF),
+                .flags = BLE_GATT_CHR_F_WRITE,
+                .access_cb = device_write
+            },
+            {
+                0
+            }
+        }
+    },
+    {
+        // Primary services.
+        //
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        // From the Bluetooth documentation, we choose device informations.
+        //
+        .uuid = BLE_UUID16_DECLARE(BATTERY_SERVICE),
+        .characteristics = (struct ble_gatt_chr_def[]){
+            {
+                .uuid = BLE_UUID16_DECLARE(BATTERY_LEVEL_CHAR),
+                .flags = BLE_GATT_CHR_F_READ,
+                .access_cb = battery_read
             },
             {
                 0

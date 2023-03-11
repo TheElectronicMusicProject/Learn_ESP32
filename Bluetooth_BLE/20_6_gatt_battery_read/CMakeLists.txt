@@ -7,4 +7,4 @@ cmake_minimum_required(VERSION 3.5)
 set(EXTRA_COMPONENT_DIRS C:/esp/esp-idf/components/bt/include/esp32/include)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(20_4_gatt_read)
+project(20_6_gatt_battery_read)

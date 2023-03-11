@@ -31,6 +31,15 @@ device_info (uint16_t conn_handle, uint16_t attr_handle,
     return 0;
 }
 
+static int
+device_write (uint16_t conn_handle, uint16_t attr_handle,
+             struct ble_gatt_access_ctxt * p_ctxt, void * p_arg)
+{
+    printf("incoming message: %.*s\n", p_ctxt->om->om_len, p_ctxt->om->om_data);
+
+    return 0;
+}
+
 const struct ble_gatt_svc_def g_gatt_svcs[] = {
     {
         // Primary services.
@@ -44,6 +53,14 @@ const struct ble_gatt_svc_def g_gatt_svcs[] = {
                 .uuid = BLE_UUID16_DECLARE(MANUFACTURER_NAME),
                 .flags = BLE_GATT_CHR_F_READ,
                 .access_cb = device_info
+            },
+            {
+                .uuid = BLE_UUID128_DECLARE(0x00, 0x11, 0x22, 0x33,
+                                            0x44, 0x55, 0x66, 0x77,
+                                            0x88, 0x99, 0XAA, 0XBB,
+                                            0XCC, 0XDD, 0XEE, 0XFF),
+                .flags = BLE_GATT_CHR_F_WRITE,
+                .access_cb = device_write
             },
             {
                 0
