@@ -1,0 +1,5 @@
+#
+# Compiler options (neccesary for the library u8g2)
+#
+CONFIG_COMPILER_DISABLE_GCC8_WARNINGS=y
+# end of Compiler options
