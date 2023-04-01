@@ -22,7 +22,9 @@
 
 static char tag[] = "test_SSD1306";
 
-void task_test_SSD1306(void *ignore) {
+void
+task_test_SSD1306 (void * p_ignore)
+{
 	u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
 	u8g2_esp32_hal.clk   = PIN_CLK;
 	u8g2_esp32_hal.mosi  = PIN_MOSI;
@@ -59,5 +61,12 @@ void task_test_SSD1306(void *ignore) {
 void
 app_main (void)
 {
+	BaseType_t ret = pdFAIL;
+	
+	ret = xTaskCreate(task_test_SSD1306, "task display", 10000, NULL, 1, NULL);
 
+	if (pdFAIL == ret)
+	{
+		ESP_LOGE(tag, "Fallita la creazione del task!");
+	}
 }

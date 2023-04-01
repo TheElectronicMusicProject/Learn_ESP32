@@ -10,3 +10,14 @@ Download and install "Serial Bluetooth Terminal" from the Play Store and connect
     * GND to ground
     * TXD to GPIO21
     * RXD to GPIO19
+
+
+## UPDATE
+With JDY-31 you must use the `1234` password to connect to the module, then see bluetooth properties on your PC.
+Find the *outcoming* COM port and select this COM from the ESP-IDF terminal.
+Then you'll see the output log inside your terminal.
+
+    * VCC to 3.3V
+    * GND to ground
+    * TXD to GPIO19
+    * RXD to GPIO21

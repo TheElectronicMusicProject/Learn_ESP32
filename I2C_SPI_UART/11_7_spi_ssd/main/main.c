@@ -74,15 +74,6 @@ app_main (void)
         .max_files = 5
     };
 
-    gpio_pad_select_gpio(GPIO_NUM_13);
-    gpio_set_direction(GPIO_NUM_13, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(GPIO_NUM_13, GPIO_PULLUP_ONLY);
-
-    while (1 == gpio_get_level(GPIO_NUM_13))
-    {
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-
     sdmmc_card_t * p_card = NULL;
     esp_err_t ret = esp_vfs_fat_sdmmc_mount("/sdcard", &host, &slot_config, &mount_config, &p_card);
 
