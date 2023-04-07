@@ -62,20 +62,41 @@ list_dir (const char * p_dir_name)
 void
 app_main (void)
 {
-    sdmmc_host_t host = SDMMC_HOST_DEFAULT();
-    sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
-    slot_config.gpio_miso = PIN_NUM_MISO;
-    slot_config.gpio_mosi = PIN_NUM_MOSI;
-    slot_config.gpio_sck = PIN_NUM_CLK;
-    slot_config.gpio_cs = PIN_NUM_CS;
-
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
         .format_if_mount_failed = true,
-        .max_files = 5
+        .max_files = 5,
+        .allocation_unit_size = 16 * 1024
+    };
+    
+    sdmmc_card_t * p_card = NULL;
+    ESP_LOGI(TAG, "Initializing SD card");
+
+    sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+    host.slot = SPI3_HOST;
+    host.max_freq_khz = 19000;
+
+    spi_bus_config_t bus_cfg = {
+        .mosi_io_num = PIN_NUM_MOSI,
+        .miso_io_num = PIN_NUM_MISO,
+        .sclk_io_num = PIN_NUM_CLK,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4000,
     };
 
-    sdmmc_card_t * p_card = NULL;
-    esp_err_t ret = esp_vfs_fat_sdmmc_mount("/sdcard", &host, &slot_config, &mount_config, &p_card);
+    esp_err_t ret = spi_bus_initialize(host.slot, &bus_cfg, SDSPI_DEFAULT_DMA);
+
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Failed to initialize bus.");
+        return;
+    }
+    sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
+    slot_config.gpio_cs = PIN_NUM_CS;
+    slot_config.host_id = host.slot;
+
+    ESP_LOGI(TAG, "Mounting filesystem");
+    ret = esp_vfs_fat_sdspi_mount("/sdcard", &host, &slot_config, &mount_config, &p_card);
 
     if (ESP_OK != ret)
     {
@@ -154,4 +175,6 @@ app_main (void)
 
     esp_vfs_fat_sdcard_unmount("/sdcard", p_card);
     ESP_LOGI(TAG, "Card unmounted");
+
+    spi_bus_free(host.slot);
 }

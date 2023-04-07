@@ -1,12 +1,4 @@
-# _ATTENTION!_
 
-I used a JDY-23 instead a JDY-31.
-My PC and smartphone doesn't support this device (connection to the bluetooth device fails every time I try).
-Download and install "Serial Bluetooth Terminal" from the Play Store and connect using it.
+Mia cartella OpenOCD C:\esp\tools\tools\openocd-esp32\v0.11.0-esp32-20211220\openocd-esp32\share\openocd\scripts
 
-## CONNECTIONS
-
-    * VCC to 5V
-    * GND to ground
-    * TXD to GPIO21
-    * RXD to GPIO19
+openocd -f .\debug\ftdi_ft2322.cfg -f .\debug\esp-wroom-32.cfg
